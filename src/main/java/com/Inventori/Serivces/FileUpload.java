@@ -39,7 +39,7 @@ public class FileUpload {
         return renamedFile;
     }
 
-    private String getFileExtension(String fileName) {
+    public String getFileExtension(String fileName) {
         if (fileName == null || fileName.lastIndexOf('.') == -1) {
             return "";
         }

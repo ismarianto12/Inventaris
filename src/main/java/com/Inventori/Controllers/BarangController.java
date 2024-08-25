@@ -19,10 +19,10 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/barang")
@@ -127,26 +127,29 @@ public class BarangController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/upload", method = RequestMethod.POST,consumes = {"multipart/form-data"})
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     public ResponseEntity<?> upload(@RequestParam("file")
-                                        MultipartFile file, ModelMap modelMap) throws IOException {
-//        if (file.isEmpty()) {
-//            return ResponseEntity.badRequest().body("File is empty");
-//        }
-//        String getfilename = file.getOriginalFilename();
-//        String getExtfilename = getfilename.substring(getfilename.lastIndexOf('.')+ 1);
-//        String renameFilename =
-//       // String fileExt =
-        //try {
-            System.out.println(modelMap.get("judul").toString()+"get log upload ");
-            FileUpload fileUpload = new FileUpload();
-            fileUpload.uploadFile(file, "barang.jpg");
-            return ResponseEntity.ok().body("berhasil upload file");
+                                    MultipartFile file, @RequestParam("title") String mapper) throws IOException {
+        System.out.println(mapper.toString() + "title response page");
+        Logger.getLogger(mapper.toString() + "response title");
+        Date date = new Date();
 
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        System.out.println(dateFormat.format(new Date()));
 
-       // } catch (Exception e) {
-        //    return ResponseEntity.status(400).body(e.getMessage());
-       // }
+        FileUpload fileUpload = new FileUpload();
+        String extension = fileUpload.getFileExtension(file.getOriginalFilename());
+        Map<String, Object> data = new HashMap<>();
+
+        if (!extension.contentEquals("png") && !extension.contentEquals("jpg") && !extension.contentEquals("pdf")) {
+            data.put("message", "jenis file tidak diizinkan");
+            return ResponseEntity.ok().body(data);
+        }
+        data.put("title", mapper);
+        data.put("message", "data berhasil disimpan");
+
+        fileUpload.uploadFile(file, "barang.jpg");
+        return ResponseEntity.ok().body(data);
 
     }
 
