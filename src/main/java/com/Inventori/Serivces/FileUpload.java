@@ -28,7 +28,7 @@ public class FileUpload {
         String renamedFile = newFileName + "." + extension;
 
         // Define the path to save the file
-        Path filePath = Paths.get(uploadDir + renamedFile);
+        Path filePath = Paths.get("./uploads/" + renamedFile);
 
         // Ensure the directory exists
         Files.createDirectories(filePath.getParent());

@@ -10,11 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +35,6 @@ public class BarangController {
 
     @GetMapping("/list")
     public ResponseEntity<?> list(@RequestParam Map<String, Object> obj) {
-
-
         Map<String, Object> data = new HashMap<>();
         if (!obj.containsKey("param")) {
             try {
@@ -125,8 +127,9 @@ public class BarangController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestBody Barang barang) throws Exception {
+    @RequestMapping(value = "/upload", method = RequestMethod.POST,consumes = {"multipart/form-data"})
+    public ResponseEntity<?> upload(@RequestParam("file")
+                                        MultipartFile file, ModelMap modelMap) throws IOException {
 //        if (file.isEmpty()) {
 //            return ResponseEntity.badRequest().body("File is empty");
 //        }
@@ -134,14 +137,16 @@ public class BarangController {
 //        String getExtfilename = getfilename.substring(getfilename.lastIndexOf('.')+ 1);
 //        String renameFilename =
 //       // String fileExt =
-        if (barang.getNama_barang().isEmpty() && barang.getKd_barang().isEmpty()) {
-            return ResponseEntity.status(400).body("field wajib diisi");
-        } else {
-
+        //try {
+            System.out.println(modelMap.get("judul").toString()+"get log upload ");
             FileUpload fileUpload = new FileUpload();
             fileUpload.uploadFile(file, "barang.jpg");
             return ResponseEntity.ok().body("berhasil upload file");
-        }
+
+
+       // } catch (Exception e) {
+        //    return ResponseEntity.status(400).body(e.getMessage());
+       // }
 
     }
 
