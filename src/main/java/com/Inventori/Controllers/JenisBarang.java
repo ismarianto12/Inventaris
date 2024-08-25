@@ -18,7 +18,6 @@ public class JenisBarang {
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public ResponseEntity<?> index() {
         Map<String, Object> objectMap = new HashMap<String, Object>();
-
         try {
             objectMap.put("response", "Data load successful");
             return ResponseEntity.ok(objectMap);
@@ -54,5 +53,16 @@ public class JenisBarang {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @RequestMapping(value =  "/delete/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        Map<String, Object> objectMap = new HashMap<>();
+        try {
+            jenisBarangRepository.deleteById(id);
 
- }
+            return ResponseEntity.ok(objectMap);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+}

@@ -19,7 +19,7 @@ public class Barang {
     private String nama_barang;
     private String harga;
     private String jumlah_stok;
-    private String id_jenisbarang;
+    private Long id_jenisbarang;
     private String created_at;
     private String updated_at;
     private String stok_awal;
@@ -29,11 +29,10 @@ public class Barang {
     public Barang() {
     }
 
-    public String getId_jenisbarang() {
+    public Long getId_jenisbarang() {
         return id_jenisbarang;
     }
-
-    public void setId_jenisbarang(String id_jenisbarang) {
+    public void setId_jenisbarang(Long id_jenisbarang) {
         this.id_jenisbarang = id_jenisbarang;
     }
 
@@ -124,6 +123,7 @@ public class Barang {
     public void setStok_keluar(String stok_keluar) {
         this.stok_keluar = stok_keluar;
     }
+
 
 
 }
