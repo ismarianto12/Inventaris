@@ -33,6 +33,16 @@ public class BarangController {
     @Autowired
     private BarangRepository barangRepository;
 
+    private String dateformatapp;
+    private String param;
+
+    BarangController() {
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        this.dateformatapp = dateFormat.format(currentDate);
+    }
+
     @GetMapping("/list")
     public ResponseEntity<?> list(@RequestParam Map<String, Object> obj) {
         Map<String, Object> data = new HashMap<>();
@@ -132,10 +142,9 @@ public class BarangController {
                                     MultipartFile file, @RequestParam("title") String mapper) throws IOException {
         System.out.println(mapper.toString() + "title response page");
         Logger.getLogger(mapper.toString() + "response title");
-        Date date = new Date();
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        System.out.println(dateFormat.format(new Date()));
+        System.out.println(dateformatapp);
+
 
         FileUpload fileUpload = new FileUpload();
         String extension = fileUpload.getFileExtension(file.getOriginalFilename());
@@ -147,6 +156,7 @@ public class BarangController {
         }
         data.put("title", mapper);
         data.put("message", "data berhasil disimpan");
+        data.put("dateresponse",this.dateformatapp);
 
         fileUpload.uploadFile(file, "barang.jpg");
         return ResponseEntity.ok().body(data);
